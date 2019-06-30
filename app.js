@@ -13,6 +13,9 @@ mongoose.connect(dbUri, { useNewUrlParser: true, useFindAndModify: false });
 const movieSchema = new mongoose.Schema({title:String,rated:String,runtime:Number,year:Number});
 const Movie = mongoose.model('Movie', movieSchema, 'movies');
 
+const commentSchema = new mongoose.Schema({name:String,email:String,text:String});
+const Comment = mongoose.model('Comment', commentSchema, 'comments');
+
 app.use(morgan('short'));
 app.use(bodyParser.json());
 
@@ -28,6 +31,21 @@ app.get("/movie/:id/", function(req,res){
     });
 });
 
+app.get("/movie/keyword/:title/", function(req, res) {
+	const title = req.params.title;
+	Movie.find({ title: title}).exec(function(err,movie){
+		if(err) res.send(err);
+		res.json(movie);
+	});
+});
+
+app.get("/comment/:id/", function(req,res){
+    const commentId = req.params.id;
+    Comment.findById(commentId).exec(function(err,comment){
+        if(err) res.send(err);
+        res.json(comment);
+    });
+});
 app.delete("/movie/:id/", function(req,res){
     const movieId = req.params.id;
     Movie.findByIdAndDelete(movieId).exec(function(err,movie){
