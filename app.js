@@ -33,7 +33,7 @@ app.get("/movie/:id/", function(req,res){
 
 app.get("/movie/keyword/:title/", function(req, res) {
 	const title = req.params.title;
-	Movie.find({ title: title}).exec(function(err,movie){
+	Movie.findOne({title: title}).exec(function(err,movie){
 		if(err) res.send(err);
 		res.json(movie);
 	});
