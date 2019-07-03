@@ -41,7 +41,7 @@ app.get("/movie/:title/", function(req, res) {
 
 app.get("/movie/keyword/:title/", function(req, res) {
 	const title = req.params.title;
-	Movie.find({'title': {'$regex': title,$options:'i'}}){
+	Movie.find({ title: new RegExp(`^${title}$`, 'i') }){
 		if(err) res.send(err);
 		res.json(movie);
 	});
